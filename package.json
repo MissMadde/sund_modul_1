@@ -1,0 +1,25 @@
+{
+  "name": "typescript",
+  "version": "1.0.0",
+  "description": "Sundsgården Modul 1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MissMadde/sund_modul_1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/MissMadde/sund_modul_1/issues"
+  },
+  "homepage": "https://github.com/MissMadde/sund_modul_1#readme",
+  "devDependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^7.0.2"
+  }
+}
