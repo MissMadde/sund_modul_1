@@ -34,7 +34,7 @@ console.log(agesInFiveYear);
 
 const names: string[] = ["Anna", "Lisa", "Elisabeth", "Rosanna", "Erik", "Jonathan"];
 
-const shortNames: string[] = names.filter(name => name.length > 4);
+const shortNames: string[] = names.filter(name => name.length <= 4);
 
 console.log(shortNames);
 
