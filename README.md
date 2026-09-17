@@ -33,3 +33,7 @@
 
 - **DELETE `/parties/:id` (Error - 404 Not Found)**  
   ![Screenshot for DELETE /parties 404 error](images/img_deleteError.png)
+
+
+  **Seats not included in post (TASK 6)**
+  ![Screenshot for POST](images/img_postNoSeats.png)
