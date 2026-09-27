@@ -51,7 +51,7 @@ app.get("/ping", (req: Request, res: Response) => {
 });
 
 
-app.get("/random-person", async (req, res) => {
+app.get("/random-person", async (req: Request, res: Response) => {
 
     try {
         const response = await fetch("https://randomuser.me/api/");
@@ -80,7 +80,7 @@ app.get("/random-person", async (req, res) => {
 });
 
 
-app.post("/users", (req, res) => {
+app.post("/users", (req: Request, res: Response) => {
     const validatedNewUser = userSchema.safeParse(req.body);
     if (!validatedNewUser.success) {
         console.error(validatedNewUser.error);
@@ -92,7 +92,7 @@ app.post("/users", (req, res) => {
 
 });
 
-app.get("/random-login", async (req, res) => {
+app.get("/random-login", async (req: Request, res: Response) => {
     try {
         const response = await fetch("https://randomuser.me/api/");
         const data = await response.json();
