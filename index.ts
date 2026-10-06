@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import { pool } from "./db.js";
 
@@ -9,20 +9,36 @@ const PORT = process.env.PORT || 3000
 
 app.use(express.json());
 
+interface Book {
+  id: number;
+  title: string;
+  genre?: string;
+  published_year?: number;
+  author_id?: number;
+}
 
+interface Author {
+  id: number;
+  name: string;
+}
 
-app.get('/', (req, res) => {
+interface BookQuery {
+  genre?: string;
+  sort?: string;
+}
+
+app.get('/', (req: Request, res: Response) => {
   res.send("Welcome to this Node.js and PostgreSQL app!");
 });
 
 
 
-app.get('/books', async (req, res) => {
+app.get('/books', async (req: Request<{}, {}, {}, BookQuery>, res: Response) => {
   const { genre, sort } = req.query;
   const allowedSorts = ["title", "published_year", "genre"];
 
   let query = "SELECT * FROM books";
-  const queryParams = [];
+  const queryParams: any = [];
 
   if (genre) {
     queryParams.push(genre);
@@ -39,13 +55,13 @@ app.get('/books', async (req, res) => {
   try {
     const result = await pool.query(query, queryParams);
     res.json(result.rows);
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).send(error.message);
   }
 });
 
 
-app.get('/books/:id', async (req, res) => {
+app.get('/books/:id', async (req: Request<{ id: string }>, res: Response) => {
   const { id } = req.params;
 
   if (!Number.isInteger(Number(id))) {
@@ -60,14 +76,14 @@ app.get('/books/:id', async (req, res) => {
       return res.status(404).send("Book not found");
     }
     res.json(result.rows[0]);
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).send(error.message);
   }
 });
 
 
 
-app.post('/books', async (req, res) => {
+app.post('/books', async (req: Request<{}, {}, Partial<Book>>, res: Response) => {
   const { title, genre, published_year, author_id } = req.body;
 
   if (!title) {
@@ -79,7 +95,7 @@ app.post('/books', async (req, res) => {
       [title, genre, published_year, author_id]
     )
     res.status(201).json(result.rows[0]);
-  } catch (error) {
+  } catch (error: any) {
     if (error.code === "23503") {
       return res.status(400).send("Invalid author_id: Author does not exist");
     }
@@ -89,7 +105,7 @@ app.post('/books', async (req, res) => {
 
 
 
-app.put('/books/:id', async (req, res) => {
+app.put('/books/:id', async (req: Request<{ id: string }, {}, Partial<Book>>, res: Response) => {
   const { id } = req.params;
   const { title, genre, published_year } = req.body;
 
@@ -106,14 +122,14 @@ app.put('/books/:id', async (req, res) => {
     }
 
     res.json(result.rows[0]);
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).send(error.message);
 
   }
 })
 
 
-app.patch('/books/:id', async (req, res) => {
+app.patch('/books/:id', async (req: Request<{ id: string }, {}, Partial<Book>>, res: Response) => {
   const { id } = req.params;
   const { title, genre, published_year } = req.body;
 
@@ -135,13 +151,13 @@ app.patch('/books/:id', async (req, res) => {
       return res.status(404).send("Book not found");
     }
     res.json(result.rows[0]);
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).send(error.message);
   }
 });
 
 
-app.delete('/books/:id', async (req, res) => {
+app.delete('/books/:id', async (req: Request<{ id: string }>, res: Response) => {
   const { id } = req.params;
 
   if (!Number.isInteger(Number(id))) {
@@ -157,7 +173,7 @@ app.delete('/books/:id', async (req, res) => {
     }
     res.send("Book deleted successfully!");
 
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).send(error.message);
   }
 });
@@ -170,20 +186,20 @@ app.delete('/books/:id', async (req, res) => {
 
 
 
-app.get('/authors', async (req, res) => {
+app.get('/authors', async (req: Request, res: Response) => {
 
   try {
     const result = await pool.query("SELECT * FROM authors");
 
     res.json(result.rows);
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).send(error.message);
   }
 });
 
 
 
-app.post('/authors', async (req, res) => {
+app.post('/authors', async (req: Request<{}, {}, Partial<Author>>, res: Response) => {
   const { name } = req.body;
 
   if (!name) {
@@ -196,14 +212,14 @@ app.post('/authors', async (req, res) => {
       [name]
     );
     res.status(201).json(result.rows[0]);
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).send(error.message);
   }
 });
 
 
 
-app.get('/authors/:id/books', async (req, res) => {
+app.get('/authors/:id/books', async (req: Request<{ id: string }>, res: Response) => {
   const { id } = req.params;
 
   if (!Number.isInteger(Number(id))) {
@@ -222,7 +238,7 @@ app.get('/authors/:id/books', async (req, res) => {
     );
 
     res.json(result.rows);
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).send(error.message);
   }
 });
