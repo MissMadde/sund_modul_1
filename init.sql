@@ -3,13 +3,18 @@ CREATE TABLE if NOT EXISTS books (
  title VARCHAR(100) NOT NULL,
  genre VARCHAR(50),
  published_year INT,
- author_id INT REFERENCES authors(id)
 );
 
 CREATE TABLE if NOT EXISTS authors (
   id SERIAL PRIMARY KEY,
   name VARCHAR(100) NOT NULL
 );
+
+ALTER TABLE books 
+ADD COLUMN author_id INT,
+ADD CONSTRAINT fk_author 
+FOREIGN KEY (author_id) 
+REFERENCES authors(id);
 
 
 INSERT INTO books (title, genre, published_year)
