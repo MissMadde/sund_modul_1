@@ -24,6 +24,7 @@ VALUES
 ('Pippi Longstocking', 'children', 1945),
 ('The Hunger Games', 'dystopian', 2008);
 
+
 INSERT INTO authors (name)
 VALUES
 ('Hobbe'),

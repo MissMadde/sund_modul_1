@@ -5,7 +5,7 @@ import { pool } from "./db.js";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
@@ -32,7 +32,6 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 
-
 app.get('/books', async (req: Request<{}, {}, {}, BookQuery>, res: Response) => {
   const { genre, sort } = req.query;
   const allowedSorts = ["title", "published_year", "genre"];
@@ -56,7 +55,8 @@ app.get('/books', async (req: Request<{}, {}, {}, BookQuery>, res: Response) => 
     const result = await pool.query(query, queryParams);
     res.json(result.rows);
   } catch (error: any) {
-    res.status(500).send(error.message);
+    console.error(error);
+    res.status(500).send("Internal Server Error");
   }
 });
 
@@ -77,7 +77,8 @@ app.get('/books/:id', async (req: Request<{ id: string }>, res: Response) => {
     }
     res.json(result.rows[0]);
   } catch (error: any) {
-    res.status(500).send(error.message);
+    console.error(error);
+    res.status(500).send("Internal Server Error");
   }
 });
 
@@ -89,6 +90,7 @@ app.post('/books', async (req: Request<{}, {}, Partial<Book>>, res: Response) =>
   if (!title) {
     return res.status(400).send("Title is required");
   }
+
   try {
     const result = await pool.query(
       "INSERT INTO books (title, genre, published_year, author_id) VALUES ($1,$2,$3,$4) RETURNING *",
@@ -99,7 +101,8 @@ app.post('/books', async (req: Request<{}, {}, Partial<Book>>, res: Response) =>
     if (error.code === "23503") {
       return res.status(400).send("Invalid author_id: Author does not exist");
     }
-    res.status(500).send(error.message);
+    console.error(error);
+    res.status(500).send("Internal Server Error");
   }
 });
 
@@ -107,15 +110,20 @@ app.post('/books', async (req: Request<{}, {}, Partial<Book>>, res: Response) =>
 
 app.put('/books/:id', async (req: Request<{ id: string }, {}, Partial<Book>>, res: Response) => {
   const { id } = req.params;
-  const { title, genre, published_year } = req.body;
+  const { title, genre, published_year, author_id } = req.body;
 
   if (!Number.isInteger(Number(id))) {
     return res.status(400).send("Invalid ID format. ID must be a number.");
   }
+
+  if (!title) {
+    return res.status(400).send("Title is required");
+  }
+
   try {
     const result = await pool.query(
-      "UPDATE books SET title = $1, genre = $2, published_year = $3 WHERE id = $4 RETURNING *",
-      [title, genre, published_year, id]
+      "UPDATE books SET title = $1, genre = $2, published_year = $3, author_id = $4 WHERE id = $5 RETURNING *",
+      [title, genre, published_year, author_id, id]
     )
     if (result.rows.length === 0) {
       return res.status(404).send("Book not found");
@@ -123,28 +131,28 @@ app.put('/books/:id', async (req: Request<{ id: string }, {}, Partial<Book>>, re
 
     res.json(result.rows[0]);
   } catch (error: any) {
-    res.status(500).send(error.message);
-
+    console.error(error);
+    res.status(500).send("Internal Server Error");
   }
-})
+});
 
 
 app.patch('/books/:id', async (req: Request<{ id: string }, {}, Partial<Book>>, res: Response) => {
   const { id } = req.params;
-  const { title, genre, published_year } = req.body;
+  const { title, genre, published_year, author_id } = req.body;
 
   if (!Number.isInteger(Number(id))) {
     return res.status(400).send("Invalid ID format. ID must be a number.");
   }
 
-  if (!title && !genre && published_year === undefined) {
+  if (!title && !genre && published_year === undefined && author_id === undefined) {
     return res.status(400).send("Request body cannot be empty");
   }
 
   try {
     const result = await pool.query(
-      "UPDATE books SET title = COALESCE($1, title), genre = COALESCE($2, genre), published_year = COALESCE($3, published_year) WHERE id = $4 RETURNING *",
-      [title, genre, published_year, id]
+      "UPDATE books SET title = COALESCE($1, title), genre = COALESCE($2, genre), published_year = COALESCE($3, published_year), author_id = COALESCE($4, author_id) WHERE id = $5 RETURNING *",
+      [title, genre, published_year, author_id, id]
     );
 
     if (result.rows.length === 0) {
@@ -152,7 +160,8 @@ app.patch('/books/:id', async (req: Request<{ id: string }, {}, Partial<Book>>, 
     }
     res.json(result.rows[0]);
   } catch (error: any) {
-    res.status(500).send(error.message);
+    console.error(error);
+    res.status(500).send("Internal Server Error");
   }
 });
 
@@ -163,6 +172,7 @@ app.delete('/books/:id', async (req: Request<{ id: string }>, res: Response) => 
   if (!Number.isInteger(Number(id))) {
     return res.status(400).send("Invalid ID format. ID must be a number.");
   }
+
   try {
     const result = await pool.query(
       "DELETE FROM books WHERE id = $1 RETURNING *",
@@ -174,7 +184,8 @@ app.delete('/books/:id', async (req: Request<{ id: string }>, res: Response) => 
     res.send("Book deleted successfully!");
 
   } catch (error: any) {
-    res.status(500).send(error.message);
+    console.error(error);
+    res.status(500).send("Internal Server Error");
   }
 });
 
@@ -193,7 +204,8 @@ app.get('/authors', async (req: Request, res: Response) => {
 
     res.json(result.rows);
   } catch (error: any) {
-    res.status(500).send(error.message);
+    console.error(error);
+    res.status(500).send("Internal Server Error");
   }
 });
 
@@ -213,7 +225,8 @@ app.post('/authors', async (req: Request<{}, {}, Partial<Author>>, res: Response
     );
     res.status(201).json(result.rows[0]);
   } catch (error: any) {
-    res.status(500).send(error.message);
+    console.error(error);
+    res.status(500).send("Internal Server Error");
   }
 });
 
@@ -239,7 +252,8 @@ app.get('/authors/:id/books', async (req: Request<{ id: string }>, res: Response
 
     res.json(result.rows);
   } catch (error: any) {
-    res.status(500).send(error.message);
+    console.error(error);
+    res.status(500).send("Internal Server Error");
   }
 });
 
