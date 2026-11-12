@@ -18,3 +18,10 @@ toEqual compare the contents of the objects if its the same.
 toBe checks if it is the exact same object.
 So if to customers orders same object margherita and two margheritas show up on to diffrent tables in the pizza shop, toEqual would say its the same object so it would be valid.
 ToBe would say no, its not the same pizza, so it would not work with toBe.
+
+**Question: Your "between 1000 and 9999" test uses a random number. Could it pass by luck even if the
+code were wrong? What could you do to make it more trustworthy?**
+
+**Answer:**
+Yes if you only do the test one time or a few, it could pass by luck.
+if we would do the test in a loop in multiple times like 100 or so, if the code is broken it would eventually be revealed. 
