@@ -1,5 +1,5 @@
 import { describe, test, expect } from "vitest";
-import { createPizza, orderPizza, sendOrder } from "./pizzashop";
+import { createPizza, orderPizza, sendOrder, chargeCustomer } from "./pizzashop";
 
 describe("Pizza Shop Unit Tests", () => {
   test("createPizza returns correct type and price", () => {
@@ -12,6 +12,12 @@ describe("Pizza Shop Unit Tests", () => {
     const pizza = createPizza("vegetarian");
 
     expect(pizza).toEqual({ type: "vegetarian", price: 110 });
+  });
+
+  test("orderPizza returns true for vegetarian", () => {
+    const result = orderPizza("vegetarian");
+
+    expect(result).toBe(true);
   });
 
   test("createPizza throws for unknown type", () => {
@@ -32,4 +38,28 @@ describe("Pizza Shop Unit Tests", () => {
 
     expect(result).toBe(true);
   });
+
+  test("chargeCustomer returns true for valid order ID and amount", () => {
+    const result = chargeCustomer(42, 100);
+    expect(result).toBe(true);
+  });
+
+  test("chargeCustomer throws when order ID is undefined", () => {
+    expect(() => chargeCustomer(undefined, 100)).toThrow(
+      "Cannot charge the customer without a valid order ID!"
+    );
+  });
+
+  test("chargeCustomer throws when order ID is negative", () => {
+    expect(() => chargeCustomer(-1, 100)).toThrow();
+  });
+
+  test("chargeCustomer throws when order ID is not a whole number", () => {
+    expect(() => chargeCustomer(12.5, 100)).toThrow();
+  });
+
+  test("chargeCustomer throws when amount is 0", () => {
+    expect(() => chargeCustomer(42, 0)).toThrow();
+  });
+
 });
