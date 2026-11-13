@@ -24,4 +24,10 @@ code were wrong? What could you do to make it more trustworthy?**
 
 **Answer:**
 Yes if you only do the test one time or a few, it could pass by luck.
-if we would do the test in a loop in multiple times like 100 or so, if the code is broken it would eventually be revealed. 
+if we would do the test in a loop in multiple times like 100 or so, if the code is broken it would eventually be revealed.
+
+**Question: In the "foundation" test, the error comes from checkOutBook , but you only called
+borrowBook . What does that show you about how errors travel through a chain of functions?**
+
+**Answer:**
+It shows us that when an error throws in a inner function in the chain, like in checkOutBook, it automatically travels to the outer function, like borrowBook, and out to the test, and we can get it even if we didnt call the right function itself.

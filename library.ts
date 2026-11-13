@@ -33,6 +33,7 @@ export const checkOutBook = (book: unknown): number => {
 };
 
 
+
 export const LoanSchema = z.object({
   loanId: z.number().int().positive(),
   title: BookTitleSchema,
