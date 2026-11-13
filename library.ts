@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 const catalogue = {
-  dune: { title: "dune", copiesAvailable: 3},
-  neuromancer: { title: "neuromancer", copiesAvaliable: 1 },
+  dune: { title: "dune", copiesAvailable: 3 },
+  neuromancer: { title: "neuromancer", copiesAvailable: 1 },
   foundation: { title: "foundation", copiesAvailable: 0 },
 };
 
@@ -30,4 +30,27 @@ export const checkOutBook = (book: unknown): number => {
 
   const loanId = Math.floor(Math.random() * 9000) + 1000;
   return loanId;
+};
+
+
+export const LoanSchema = z.object({
+  loanId: z.number().int().positive(),
+  title: BookTitleSchema,
+  memberId: z.number().int().positive(),
+});
+
+export type Loan = z.infer<typeof LoanSchema>;
+
+export const registerLoan = (
+  loanId: unknown,
+  title: unknown,
+  memberId: unknown
+): Loan => {
+  return LoanSchema.parse({ loanId, title, memberId });
+};
+
+export const borrowBook = (title: unknown, memberId: unknown): Loan => {
+  const book = findBook(title);
+  const loanId = checkOutBook(book);
+  return registerLoan(loanId, book.title, memberId);
 };
