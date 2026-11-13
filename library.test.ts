@@ -50,3 +50,19 @@ describe("Library checkOutBook Unit Tests", () => {
     expect(() => checkOutBook({ title: "dune" })).toThrow();
   });
 });
+
+
+describe("Library registerLoan Unit Tests", () => {
+  test("registerLoan returns a valid Loan object", () => {
+    const loan = registerLoan(1234, "dune", 7);
+    expect(loan).toEqual({ loanId: 1234, title: "dune", memberId: 7 });
+  });
+
+  test("registerLoan throws when memberId is 0", () => {
+    expect(() => registerLoan(1234, "dune", 0)).toThrow();
+  });
+
+  test("registerLoan throws when title is not in the catalogue", () => {
+    expect(() => registerLoan(1234, "harry potter", 7)).toThrow();
+  });
+});
