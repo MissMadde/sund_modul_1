@@ -29,3 +29,9 @@ Yes it would. Typescript tsc --noEmit feels if the variable is null or undefined
 
 CI is using it because it guarantees a completely reproducible and fast and reliable build.
 It destroys the  risk of erreros caused by different versions of packages.
+
+**Question: What does branch protection do that CI alone can't?**
+
+**Answer:**
+CI runs tests and checks the codes quality, but it can't prevent someone from merging. 
+The branch protection rules is blocking the merge button so that broken code can't be merged to the main branch.
