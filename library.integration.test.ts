@@ -1,5 +1,5 @@
 import { describe, test, expect } from "vitest";
-import { borrowBook } from "./library";
+import { borrowBook } from "./library.js";
 
 describe("Library borrowBook Integration Tests", () => {
   test("borrowBook returns a valid loan for an available book", () => {
