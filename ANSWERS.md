@@ -11,7 +11,21 @@ steps: Its a sequence of actions to be executed in an order. Like the ones we ca
 **Answer:**
 It can be because of environmental differences like versions of node.js or dependencies and local settings in the project? Like my first build craches with node 18 but works on build 22 because its a new function/dependency in the later version that makes it work. 
 
-**Question: Would this step have caught the possibly null bug from Week 11, Exercise 9?**
+**Question 3: Why is a red cross on the pull request better than one after merging?**
+
+**Answer:**
+It stops broken code before it merges into the main/root branch. When the code merges it ensures that the code in the base branch always works and are green. 
+
+**Question 4: Would this step have caught the possibly null bug from Week 11, Exercise 9?**
 
 **Answer:**
 Yes it would. Typescript tsc --noEmit feels if the variable is null or undefined and stops the loop.
+
+**Question 5: What's the difference between npm ci and npm install , and why does CI use npm ci ?**
+
+**Answer:**
+`npm install` is used for local development. it can update package-lock.json with new versions end dependencies if needed.
+`npm ci` (clean install) is used for automated environments like CI. It must have package-lock.json to work.
+
+CI is using it because it guarantees a completely reproducible and fast and reliable build.
+It destroys the  risk of erreros caused by different versions of packages.

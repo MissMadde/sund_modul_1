@@ -9,10 +9,12 @@
     "vitest": "^5.1.0"
   },
   "scripts": {
- "test": "vitest run",
- "test:watch": "vitest",
- "test:coverage": "vitest run --coverage",
- "typecheck": "tsc --noEmit"
-}
-
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
 }
