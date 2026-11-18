@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+const copies: number = "three";
+
 const catalogue = {
   dune: { title: "dune", copiesAvailable: 3 },
   neuromancer: { title: "neuromancer", copiesAvailable: 1 },
