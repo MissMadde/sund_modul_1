@@ -1,30 +1,12 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+**Question 1: What do on , runs-on , strategy.matrix and steps do? Why did nothing happen when you only pushed the branch?**
 
-name: Node.js CI
+**Answer:**
+on: shows what events to be triggerd. Like push or pull request.
+runs-on: decides what environment or OS the work will run on.
+strategy.matrix: Lets me run the same workflow parallel to other configurations.
+steps: Its a sequence of actions to be executed in an order. Like the ones we can see in our run-loop in actions tap.
 
-on:
-  push:
-    branches: [ "week12/ci" ]
-  pull_request:
-    branches: [ "week12/ci" ]
+**Question 2: Why can a test pass on your laptop but fail in CI? Think of why the video's first run failed.**
 
-jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [18.x, 20.x, 22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-
-    steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm test
+**Answer:**
+It can be because of environmental differences like versions of node.js or dependencies and local settings in the project? Like my first build craches with node 18 but works on build 22 because its a new function/dependency in the later version that makes it work. 
