@@ -7,9 +7,9 @@ describe("Library findBook Unit Tests", () => {
     expect(book).toEqual({ title: "dune", copiesAvailable: 3 });
   });
 
-  test("fixing test on purpose: expects right number of copies for dune", () => {
+  test("making error on purpose: expects right number of copies for dune", () => {
   const book = findBook("dune");
-  expect(book.copiesAvailable).toBe(3);
+  expect(book.copiesAvailable).toBe(99);
 });
 
   test("findBook returns foundation even though copiesAvailable is 0", () => {
