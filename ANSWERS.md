@@ -10,3 +10,8 @@ steps: Its a sequence of actions to be executed in an order. Like the ones we ca
 
 **Answer:**
 It can be because of environmental differences like versions of node.js or dependencies and local settings in the project? Like my first build craches with node 18 but works on build 22 because its a new function/dependency in the later version that makes it work. 
+
+**Question: Would this step have caught the possibly null bug from Week 11, Exercise 9?**
+
+**Answer:**
+Yes it would. Typescript tsc --noEmit feels if the variable is null or undefined and stops the loop.
