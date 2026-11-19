@@ -15,7 +15,6 @@ dotenv.config();
 
 const app = express();
 
-
 const PORT = process.env.PORT;
 
 app.use(express.json());
@@ -39,20 +38,7 @@ const startServer = async () => {
   }
 };
 
-
-
-interface Book {
-  id: number;
-  title: string;
-  genre?: string;
-  published_year?: number;
-  author_id?: number;
-}
-
-interface Author {
-  id: number;
-  name: string;
-}
+void startServer()
 
 interface BookQuery {
   genre?: string;
@@ -268,7 +254,7 @@ app.get('/authors', async (req: Request, res: Response) => {
 });
 
 
-app.post('/authors', async (req: Request<{}, {}, Partial<Author>>, res: Response) => {
+app.post('/authors', async (req: Request<{}, {}, { name?: string }>, res: Response) => {
   const { name } = req.body;
 
   Sentry.addBreadcrumb({
